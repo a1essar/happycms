@@ -1,0 +1,29 @@
+{
+    "name": "happycms",
+    "type": "project",
+    "description": "",
+    "keywords": ["cms", "microframework"],
+    "homepage": "http://happycms.ru",
+    "license": "",
+    "authors": [
+        {
+            "name": "Magamed Esmurziev",
+            "email": "a1essar@willbenice.ru"
+        },
+        {
+            "name": "Isa Ugurchiev",
+            "email": "isa@willbenice.ru"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "happy": "/"
+        },
+        "classmap": [
+            "/"
+        ]
+    }
+}
