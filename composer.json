@@ -1,5 +1,6 @@
 {
-    "name": "happycms",
+    "name": "happycms/happycms",
+    "version":"2.0.0",
     "type": "project",
     "description": "",
     "keywords": ["cms", "microframework"],
@@ -20,10 +21,7 @@
     },
     "autoload": {
         "psr-0": {
-            "happy": "/"
-        },
-        "classmap": [
-            "/"
-        ]
+            "lib": ""
+        }
     }
 }
