@@ -12,19 +12,50 @@ namespace Happy;
 
 class Request
 {
-    public function __construct()
+    public function __construct($appRoot)
     {
         echo 'Request class <br />';
+        echo $this->getRequest($appRoot);
+        echo '<br />';
     }    
     
     /** 
      * Описание метода
 	 */
-	public static function getRequest()
+	public function getRequest($appRoot = '')
 	{
-	   $request = $_SERVER['REQUEST_URI'];
-       var_dump($request);
-       return $request;    
+        $request = $this->clearParameters($_SERVER['REQUEST_URI']);
+       
+        if (strpos($request, $appRoot) !== false){
+            $request = substr($request, strlen($appRoot), strlen($request));
+            $request = trim($request, '/');
+        }
+       
+        if ($_SERVER['QUERY_STRING'] !== ''){
+            $request = str_replace('?' . $this->clearParameters($_SERVER['QUERY_STRING']), '', $request);
+        }
+        
+        if (!$request){
+            return false;
+        }
+        
+        return $request;    
 	}
+    
+    /** 
+     * Описание метода
+	 */
+    private function clearParameters($parameters)
+    {
+        if(is_array($parameters)){
+            foreach ($parameters as $key => $value){
+                $a[$key] = self::clearParameters($value);                
+            }
+        } else {
+            $a = trim(trim(htmlentities($parameters, ENT_QUOTES, 'UTF-8')), '/');    
+        }
+
+        return $a;
+    }
 }
 ?>

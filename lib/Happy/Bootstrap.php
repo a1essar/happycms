@@ -28,15 +28,15 @@ class Bootstrap
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($appRoot)
     {
         echo 'Bootstrap class <br />';
         
-        $this->initialize();
+        $this->initialize($appRoot);
     }    
     
-    private function initialize(){
-        $this->request = new Request(); 
+    private function initialize($appRoot){
+        $this->request = new Request($appRoot); 
         $this->controller = new Controller();
         $test = $this->controller->getController()['main']['controller'];
         $test();
