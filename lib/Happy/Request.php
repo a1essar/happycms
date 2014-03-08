@@ -25,14 +25,15 @@ class Request
 	public function getRequest($appRoot = '')
 	{
         $request = $this->clearParameters($_SERVER['REQUEST_URI']);
+        $query = '?' . $this->clearParameters($_SERVER['QUERY_STRING']);
        
         if (strpos($request, $appRoot) !== false){
             $request = substr($request, strlen($appRoot), strlen($request));
             $request = trim($request, '/');
         }
        
-        if ($_SERVER['QUERY_STRING'] !== ''){
-            $request = str_replace('?' . $this->clearParameters($_SERVER['QUERY_STRING']), '', $request);
+        if (strpos($request, $query) !== false){
+            $request = substr($request, 0, strlen($request) - strlen($query));
         }
         
         if (!$request){
