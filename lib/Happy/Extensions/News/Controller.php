@@ -18,11 +18,35 @@ class Controller extends BaseController
     {
         echo '|-> News Controller class <br />';
         
-        $this->setController('/news', function(){
+        $this->setController('news', function(){
             $this->news();  
         });
         
-        $this->setController('/news/:id[int]', function(){
+        $this->setController('news/{id:int}', function(){
+            $this->news();  
+        });
+        
+        $this->setController('news/{link:str}', function(){
+            $this->news();  
+        });
+        
+        $this->setController('news/page{id:int}', function(){
+            $this->news();  
+        });
+        
+        $this->setController('news/category/{category}', function(){
+            $this->news();  
+        });
+        
+        $this->setController('news/{category}/page{id:int}', function(){
+            $this->news();  
+        });
+        
+        $this->setController('@/news/add', function(){
+            $this->news();  
+        }, 'post');
+        
+        $this->setController('@/news/edit/{id:int}', function(){
             $this->news();  
         });
     }

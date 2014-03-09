@@ -25,11 +25,11 @@ class Controller
             echo 'Home Controller <br />';    
         });
         
-        $this->setController('/', function(){
+        $this->setController('', function(){
             echo 'Home Controller <br />';    
         });
         
-        $this->setController('/main', function(){
+        $this->setController('main', function(){
             $this->main();  
         });
     }    
