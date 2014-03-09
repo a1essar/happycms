@@ -19,42 +19,47 @@ class Controller
     
     public function __construct()
     {
-        echo 'Controller class <br />';
+        echo '|-> Controller class <br />';
         
-        $this->setController('home', ['/'], function(){
+        $this->setController('home/long/rules', function(){
             echo 'Home Controller <br />';    
         });
         
-        $this->setController('main', ['/main'], function(){
+        $this->setController('/', function(){
+            echo 'Home Controller <br />';    
+        });
+        
+        $this->setController('/main', function(){
             $this->main();  
         });
     }    
     
     /** 
      * Описание метода
-	 */
-	protected function setController($name, $request, $controller)
-	{
-        $this->controllers[$name] = [
+     */
+    protected function setController($request, $controller, $type = 'get')
+    {
+        $this->controllers[] = [
             'request' => $request,
+            'type' => $type,
             'controller' => $controller
         ];
-	}
+    }
     
     /** 
      * Описание метода
-	 */
-	public function getController($name = null)
-	{
-        return (!$name) ? $this->controllers : $this->controllers[$name];
-	}
+     */
+    public function getController()
+    {
+        return $this->controllers;
+    }
     
     /** 
      * Описание метода
-	 */
-	protected function main()
-	{
-        echo 'Main Controller <br />';
-	}
+     */
+    protected function main()
+    {
+        echo 'Main Controller method <br />';
+    }
 }
 ?>

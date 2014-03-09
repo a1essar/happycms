@@ -12,6 +12,7 @@ namespace Happy;
 
 use Happy\Request;
 use Happy\Controller;
+use Happy\Extensions\News\Controller as ControllerNews;
 
 class Bootstrap
 {
@@ -21,25 +22,23 @@ class Bootstrap
     private $request;
     
     /**
-     * @var Happy\Controller
+     * @var $controllers
      */
-    private $controller;
+    private $controllers = array();
     
     /**
      * Constructor
      */
-    public function __construct($appRoot)
+    public function __construct()
     {
-        echo 'Bootstrap class <br />';
-        
-        $this->initialize($appRoot);
+        echo '|-> Bootstrap class <br />';
     }    
     
-    private function initialize($appRoot){
-        $this->request = new Request($appRoot); 
-        $this->controller = new Controller();
-        $test = $this->controller->getController()['main']['controller'];
-        $test();
+    public function run($root = null)
+    {
+        $this->controllers = array_merge($this->controllers, (new Controller)->getController());
+        $this->controllers = array_merge($this->controllers, (new ControllerNews)->getController());
+        $this->request = new Request($this->controllers, $root); 
     }
 }
 ?>
