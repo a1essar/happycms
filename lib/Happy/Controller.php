@@ -19,14 +19,12 @@ class Controller
     
     public function __construct()
     {
-        echo '|-> Controller class <br />';
-        
         $this->setController('home/long/rules', function(){
-            echo 'Home Controller <br />';    
+            echo 'Home Controller: home/long/rules <br />';    
         });
         
         $this->setController('', function(){
-            echo 'Home Controller <br />';    
+            echo 'Home Controller: <br />';    
         });
         
         $this->setController('main', function(){
@@ -49,6 +47,19 @@ class Controller
     /** 
      * Описание метода
      */
+    public function init($controller, $parameters)
+    {
+        if(!$controller){
+            $this->error404();
+            return false;    
+        }
+        
+        $controller['controller']($parameters);
+    }
+    
+    /** 
+     * Описание метода
+     */
     public function getController()
     {
         return $this->controllers;
@@ -57,9 +68,17 @@ class Controller
     /** 
      * Описание метода
      */
+    protected function error404()
+    {
+        echo 'error 404 <br />';
+    }
+    
+    /** 
+     * Описание метода
+     */
     protected function main()
     {
-        echo 'Main Controller method <br />';
+        echo 'Main Controller method: main <br />';
     }
 }
 ?>

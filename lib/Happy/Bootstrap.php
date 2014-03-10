@@ -22,6 +22,11 @@ class Bootstrap
     private $request;
     
     /**
+     * @var Happy\Controller
+     */
+    private $controller;
+    
+    /**
      * @var $controllers
      */
     private $controllers = array();
@@ -31,14 +36,16 @@ class Bootstrap
      */
     public function __construct()
     {
-        echo '|-> Bootstrap class <br />';
     }    
     
     public function run($root = null)
     {
-        $this->controllers = array_merge($this->controllers, (new Controller)->getController());
+        $this->controller = new Controller();
+        $this->controllers = array_merge($this->controllers, $this->controller->getController());
+        //Загружаем контроллеры из модулей
         $this->controllers = array_merge($this->controllers, (new ControllerNews)->getController());
         $this->request = new Request($this->controllers, $root); 
+        $this->controller->init($this->request->getRequestController(), $this->request->getRequestParameters());
     }
 }
 ?>

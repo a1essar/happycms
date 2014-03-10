@@ -28,6 +28,16 @@ class Request
     private $parameters = array();
     
     /**
+     * @var $requestParametersName
+     */
+    private $requestParametersName = array();
+    
+    /**
+     * @var $requestParametersValue
+     */
+    private $requestParametersValue = array();
+    
+    /**
      * @var $request
      */
     private $request;
@@ -42,9 +52,9 @@ class Request
      */
     private $patterns = [
         'parameters' => '/{([^}]*)}/',
-        'any' => '[a-zA-Z0-9\.\-_%]+',
-        'int' => '[0-9]+',
-        'str' => '[a-zA-Z\.\-_%]+'
+        'any' => '([a-zA-Zа-яА-Я0-9\.\-_%]+)',
+        'int' => '([0-9]+)',
+        'str' => '([a-zA-Zа-яА-Я\.\-_%]+)'
     ];
     
     /**
@@ -54,24 +64,37 @@ class Request
     
     public function __construct($controllers, $root = null)
     {
-        echo '|-> Request class <br />';
-        $this->controllers = $this->sortUrlsLength($controllers, 'request');
+        $this->controllers = $this->sortRequestLength($controllers, 'request');
         $this->root = $root;
         $this->request = $this->getRequest();
         $this->type = $this->getRequestType();
-        $this->controller = $this->urlMatcher();
+        $this->controller = $this->getController();
         $this->parameters = $this->getParameters();
-        echo 'current controller: ';
-        var_dump($this->controller);
-    }    
+    }   
+    
+    /** 
+     * Описание метода
+	 */
+    public function getRequestController()
+    {
+        return $this->controller;    
+    } 
+    
+    /** 
+     * Описание метода
+	 */
+    public function getRequestParameters()
+    {
+        return $this->parameters;    
+    } 
     
     /** 
      * Описание метода
 	 */
     public function getRequest()
     {
-        $request = $this->clearParameters($_SERVER['REQUEST_URI']);
-        $query = '?' . $this->clearParameters($_SERVER['QUERY_STRING']);
+        $request = urldecode($this->clearParameters($_SERVER['REQUEST_URI']));
+        $query = '?' . urldecode($this->clearParameters($_SERVER['QUERY_STRING']));
        
         if (strpos($request, $this->root) !== false){
             $request = substr($request, strlen($this->root), strlen($request));
@@ -104,11 +127,8 @@ class Request
     /** 
      * Описание метода
      */
-    private function urlMatcher()
+    private function getController()
     {
-        var_dump('getRequest:', $this->request);
-        echo '<br />';
-        
         foreach($this->controllers as $controller){
             //ищем абсолютные правила
             if($controller['request'] == $this->request){
@@ -120,9 +140,7 @@ class Request
                 $parameters = [];
                 $matches = [];
                 
-                preg_match_all($this->patterns['parameters'], $controller['request'], $parameters);
-                
-                if(isset($parameters[1][0]) && $parameters[1][0] == ''){
+                if(preg_match_all($this->patterns['parameters'], $controller['request'], $parameters) <= 0){
                     return false;
                 }
                 
@@ -142,11 +160,13 @@ class Request
                     $patternRules = str_replace($value, $this->patterns['any'], $patternRules); 
                 }    
                 
-                $patternRules .= '/';
-                
-                preg_match($patternRules, $this->request, $matches);
-                
-                if(isset($matches[0]) && $matches[0] !== '' && $controller['type'] == $this->type && strlen($matches[0]) == strlen($this->request)){
+                $patternRules .= '/u';
+
+                if(preg_match($patternRules, $this->request, $matches) > 0 && $controller['type'] == $this->type && strlen($matches[0]) == strlen($this->request)){
+                    array_shift($matches);
+                    $this->requestParametersName = $parameters[1];
+                    $this->requestParametersValue = $matches;
+                    
                     return $controller; 
                 }
             }
@@ -170,6 +190,16 @@ class Request
         
         if ($_FILES){
             $parameters['files'] = $this->clearParameters($_FILES);
+        }
+        
+        if($this->requestParametersName && $this->requestParametersValue){
+            foreach($this->requestParametersName as $key => $value){
+                if(strpos($value, ':') !== false){
+                    $parameters[explode(':', $value)[0]] = $this->requestParametersValue[$key];
+                }else{
+                    $parameters[$value] = $this->requestParametersValue[$key];
+                }
+            }
         }
         
         if(isset($parameters)){
@@ -198,7 +228,7 @@ class Request
     /** 
      * Описание метода
      */
-    private function sortUrlsLength($array, $sortKey){
+    private function sortRequestLength($array, $sortKey){
         $size  = sizeof($array)-1;
         $buff = '';
         for($i = $size; $i>=0; $i--){
