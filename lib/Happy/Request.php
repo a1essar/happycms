@@ -240,8 +240,22 @@ class Request
                 }
             }
         }
+        
+        foreach ($array as $key => $r){
+            if (strpos($r[$sortKey], '{') !== false && strpos($r[$sortKey], '}') !== false){
+                $routersDynamic[] = $r;
+			}else{
+                $routersStatic[] = $r;
+            }
+        }
+
+        if (isset($routersDynamic)){
+            $arrayNew = array_merge($routersStatic, $routersDynamic);
+        }else{
+            $arrayNew = $array;
+        }
       
-        return $array;
+        return $arrayNew;
     }
 }
 ?>

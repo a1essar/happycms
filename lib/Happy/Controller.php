@@ -27,6 +27,11 @@ class Controller
             echo 'Home Controller: <br />';    
         });
         
+        $this->setController('{page}', function($parameters){
+            echo 'Page Controller: <br />'; 
+            echo '$page: ' . $parameters['page'];    
+        });
+        
         $this->setController('main', function(){
             $this->main();  
         });
