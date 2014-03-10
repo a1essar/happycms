@@ -31,19 +31,7 @@ class Controller
             $this->main();  
         });
     }    
-    
-    /** 
-     * Описание метода
-     */
-    protected function setController($request, $controller, $type = 'get')
-    {
-        $this->controllers[] = [
-            'request' => $request,
-            'type' => $type,
-            'controller' => $controller
-        ];
-    }
-    
+
     /** 
      * Описание метода
      */
@@ -55,6 +43,18 @@ class Controller
         }
         
         $controller['controller']($parameters);
+    }
+    
+    /** 
+     * Описание метода
+     */
+    protected function setController($request, $controller, $type = 'get')
+    {
+        $this->controllers[] = [
+            'request' => $request,
+            'type' => $type,
+            'controller' => $controller
+        ];
     }
     
     /** 
