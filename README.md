@@ -27,4 +27,4 @@ cd path/to/composer.json
 composer install
 </pre>
 
-Copy files of happycms/lib/Web/ to your www directory
+Copy files of happycms/lib/public/ to your public directory
