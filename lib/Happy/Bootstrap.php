@@ -10,42 +10,47 @@
  
 namespace Happy;
 
-use Happy\Request;
 use Happy\Controller;
 use Happy\Extensions\News\Controller as ControllerNews;
+use Happy\Request;
+use Happy\Response;
 
 class Bootstrap
 {
+    /**
+     * @var Happy\Controller
+     */
+    private $controller;    
+
     /**
      * @var Happy\Request
      */
     private $request;
     
     /**
-     * @var Happy\Controller
+     * @var array
      */
-    private $controller;
+    private $controllers = [];
     
     /**
-     * @var $controllers
+     * @var array
      */
-    private $controllers = array();
+    private $send = [];
     
     /**
      * Constructor
      */
     public function __construct()
-    {
+    {  
     }    
     
     public function run($root = null)
     {
         $this->controller = new Controller();
         $this->controllers = array_merge($this->controllers, $this->controller->getController());
-        //Загружаем контроллеры из модулей
         $this->controllers = array_merge($this->controllers, (new ControllerNews)->getController());
         $this->request = new Request($this->controllers, $root); 
-        $this->controller->init($this->request->getRequestController(), $this->request->getRequestParameters());
+        (new Response)->send($this->controller->init($this->request->getRequestController(), $this->request->getRequestParameters()));   
     }
 }
 ?>

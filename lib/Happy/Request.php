@@ -13,42 +13,42 @@ namespace Happy;
 class Request
 {
     /**
-     * @var $controllers
+     * @var array
      */
-    private $controllers = array();
+    private $controllers = [];
     
     /**
-     * @var $controller
+     * @var array
      */
-    private $controller = array();
+    private $controller = [];
     
     /**
-     * @var $parameters
+     * @var array
      */
-    private $parameters = array();
+    private $parameters = [];
     
     /**
-     * @var $requestParametersName
+     * @var array
      */
-    private $requestParametersName = array();
+    private $requestParametersName = [];
     
     /**
-     * @var $requestParametersValue
+     * @var array
      */
-    private $requestParametersValue = array();
+    private $requestParametersValue = [];
     
     /**
-     * @var $request
+     * @var string
      */
     private $request;
     
     /**
-     * @var $type
+     * @var string
      */
     private $type;
     
     /**
-     * @var $patterns
+     * @var array
      */
     private $patterns = [
         'parameters' => '/{([^}]*)}/',
@@ -58,7 +58,7 @@ class Request
     ];
     
     /**
-     * @var $root
+     * @var string
      */
     private $root;
     
@@ -207,6 +207,14 @@ class Request
         }else{
             return false;
         }
+    }
+    
+    /** 
+     * Описание метода
+     * @todo метод setPatten, добавляет новый паттерн в $this->patterns 
+     */
+    private function setPattern($pattaern)
+    {
     }
     
     /** 

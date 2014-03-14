@@ -10,30 +10,19 @@
  
 namespace Happy;
 
+use Happy\Config;
+
 class Controller
 {
     /**
-     * @var $controllers
+     * @var array
      */
-    private $controllers = array();
+    private $controllers = [];
     
     public function __construct()
-    {
-        $this->setController('home/long/rules', function(){
-            echo 'Home Controller: home/long/rules <br />';    
-        });
-        
+    {   
         $this->setController('', function(){
-            echo 'Home Controller: <br />';    
-        });
-        
-        $this->setController('{page}', function($parameters){
-            echo 'Page Controller: <br />'; 
-            echo '$page: ' . $parameters['page'];    
-        });
-        
-        $this->setController('main', function(){
-            $this->main();  
+            return $this->render(['template' => 'home']);    
         });
     }    
 
@@ -47,11 +36,14 @@ class Controller
             return false;    
         }
         
-        $controller['controller']($parameters);
+        return $controller['controller']($parameters);
     }
     
     /** 
      * Описание метода
+     * @todo возможность указывать необязательный параметр в запросе: page/{param1:str}/({param2:int})
+     * @todo возможность передовать в контроллере запросы массивом: ['home', 'main', 'page/{param}']
+     * @todo объеденить запросы и тип в одну строку: page/{param}:post
      */
     protected function setController($request, $controller, $type = 'get')
     {
@@ -80,10 +72,15 @@ class Controller
     
     /** 
      * Описание метода
+     * @param array $send
+     * @todo метод render, загружает шаблон и передает в него параметры
      */
-    protected function main()
-    {
-        echo 'Main Controller method: main <br />';
+    protected function render($send)
+    {   
+        Config::init();
+        $send['config'] = Config::get('path');
+                        
+        return $send;
     }
 }
 ?>
