@@ -77,7 +77,7 @@ class Controller
      */
     protected function render($send)
     {   
-        Config::init();
+        Config::setPath('root', 'http://' . $_SERVER['SERVER_NAME']);
         $send['config'] = Config::get('path');
                         
         return $send;

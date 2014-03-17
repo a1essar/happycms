@@ -33,7 +33,8 @@ class Config
             'css' => 'app/css',
             'js' => 'app/js',
             'plugins' => 'app/plugins',
-            'fonts' => 'app/fonts'
+            'fonts' => 'app/fonts',
+            'cache' => 'app/cache'
         ]
     ];
     
@@ -45,8 +46,12 @@ class Config
         return self::$config[$key] = $value;  
     }
     
-    public static function init(){
-        return self::$config['path']['root'] = $_SERVER['SERVER_NAME'];  
+    public static function getPath($key){
+        return self::$config['path'][$key];  
+    }
+    
+    public static function setPath($key, $value){
+        return self::$config['path'][$key] = $value;  
     }
 }
 ?>

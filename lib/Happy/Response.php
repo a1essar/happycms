@@ -24,6 +24,11 @@ class Response
     ];
     
     /**
+     * @var array
+     */
+    private $combineFiles = [];
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -104,6 +109,62 @@ class Response
         if(file_exists($this->send['config']['template'] . $this->send['config']['/'] . $temptale . '.php')){
             require_once $this->send['config']['template'] . $this->send['config']['/'] . $temptale . '.php';               
         }
+    }
+    
+    /**
+     * Описание метода
+     */
+    private function setCombineFiles($file, $extension)
+    {
+        return $this->combineFiles[$extension][] = $file;
+    }
+    
+    /**
+     * Описание метода
+     */
+    private function getCombineFile($option = [])
+    {
+        $optionDef = [
+            'extension' => 'js',
+            'minify' => false,
+            'cache' => false
+        ];
+        
+        $option = array_merge($optionDef, $option);
+
+        $filename = '';
+        foreach ($this->combineFiles[$option['extension']] as $file){
+            $filename .= pathinfo($file)['filename'] . '_';
+        }
+        
+        $filename = trim($filename, '_');       
+        $filenameCache = md5($filename); 
+        $filenameCache .= '.' . $option['extension'];
+
+        $pathTo = $this->send['config']['cache'] . $this->send['config']['/'];
+        $pathToPublic = $this->send['config']['root'] . $this->send['config']['/'] . $this->send['config']['cache'] . $this->send['config']['/'];
+        
+        if($option['cache'] && file_exists($pathTo . $filenameCache)){
+            return $pathToPublic . $filenameCache;    
+        }
+        
+        $filesString = '';
+        foreach($this->combineFiles[$option['extension']] as $file){
+            $file = ltrim($file, '/');
+            
+            if (file_exists($file)){
+                $filesString .= "\n".'/* file: '. $file . ' */'."\n";
+                $filesString .= file_get_contents($file); 
+            }
+        }
+        
+        if($option['minify']){
+            $filesString = str_replace(["\r\n","\r","\n","\t",'  ','    ','    '], '', $filesString); 
+        }
+        
+        file_put_contents($pathTo . $filenameCache, $filesString);
+        
+        return $pathToPublic . $filenameCache;
     }
 }
 ?>
