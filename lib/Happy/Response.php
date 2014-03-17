@@ -36,7 +36,7 @@ class Response
     } 
     
     /**
-     * Описание метода
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
      */
     private function setParameters($send = [])
     {
@@ -48,7 +48,7 @@ class Response
     } 
     
     /**
-     * Описание метода
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
      */
     private function sendHeaders()
     {
@@ -65,7 +65,7 @@ class Response
     }  
     
     /**
-     * Описание метода
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
      */
     private function sendContent()
     {
@@ -82,7 +82,7 @@ class Response
     }  
     
     /**
-     * Описание метода
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
      */
     public function send($send = [])
     {
@@ -102,7 +102,7 @@ class Response
     }
     
     /**
-     * Описание метода
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
      */
     private function getTemplate($temptale)
     {
@@ -112,7 +112,7 @@ class Response
     }
     
     /**
-     * Описание метода
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
      */
     private function setCombineFiles($file, $extension)
     {
@@ -120,7 +120,7 @@ class Response
     }
     
     /**
-     * Описание метода
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
      */
     private function getCombineFile($option = [])
     {
@@ -163,7 +163,6 @@ class Response
         }
         
         file_put_contents($pathTo . $filenameCache, $filesString);
-        
         return $pathToPublic . $filenameCache;
     }
 }
