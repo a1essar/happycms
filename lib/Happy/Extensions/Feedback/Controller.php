@@ -17,7 +17,7 @@ class Controller extends BaseController
 {
     public function __construct()
     {   
-        $this->setController('feedback', function(){
+        $this->setController('feedback', function() {
             $response = (new FeedbackModel())->feedbackList();
             
             return $this->render([
@@ -27,16 +27,16 @@ class Controller extends BaseController
             );          
         });
         
-        $this->setController('feedback/{id:int}', function($parameters){
+        $this->setController('feedback/{id:int}', function($parameters) {
             $response = (new FeedbackModel())->feedbackItem($parameters['id']);
    
-            if(!empty($response)){
+            if (!empty($response)) {
                 return $this->render([
                         'template' => 'feedback_item',
                         'response' => $response
                     ]
                 );   
-            }else{
+            } else {
                 return $this->render([
                         'template' => '404'
                     ]
@@ -44,11 +44,11 @@ class Controller extends BaseController
             }            
         });
         
-        $this->setController('feedback/add', function($parameters){
-            (new FeedbackModel())->feedbackAdd($parameters);            
+        $this->setController('feedback/add', function($parameters) {
+            (new FeedbackModel())->feedbackAdd($parameters['post']);            
         }, 'ajax');
         
-        $this->setController('@/feedback', function(){
+        $this->setController('@/feedback', function() {
             $response = (new FeedbackModel())->feedbackList();
             
             return $this->render([
@@ -58,26 +58,26 @@ class Controller extends BaseController
             );      
         });
         
-        $this->setController('@/feedback/{id:int}', function($parameters){
+        $this->setController('@/feedback/{id:int}', function($parameters) {
             $response = (new FeedbackModel())->feedbackItem($parameters['id']);
             
-            if(!empty($response)){
+            if (!empty($response)) {
                 return $this->render([
                         'template' => 'admin/feedback_item',
                         'response' => $response
                     ]
                 );   
-            }else{
+            } else {
                 echo '404';
             }            
         });
         
-        $this->setController('@/feedback/delete', function($parameters){
-            (new FeedbackModel())->feedbackDelete($parameters['id']);          
+        $this->setController('@/feedback/delete', function($parameters) {
+            (new FeedbackModel())->feedbackDelete($parameters['post']['feedback_id']);          
         }, 'ajax');
         
-        $this->setController('@/feedback/update', function($parameters){
-            (new FeedbackModel())->feedbackUpdate($parameters);             
+        $this->setController('@/feedback/update', function($parameters) {
+            (new FeedbackModel())->feedbackUpdate($parameters['post']);             
         }, 'ajax');
     }
 }
