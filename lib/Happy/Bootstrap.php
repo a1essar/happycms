@@ -11,6 +11,7 @@
 namespace Happy;
 
 use Happy\Controller;
+use Happy\Extensions\Pages\Controller as ControllerPages;
 use Happy\Extensions\News\Controller as ControllerNews;
 use Happy\Extensions\Feedback\Controller as ControllerFeedback;
 use Happy\Request;
@@ -49,6 +50,7 @@ class Bootstrap
     {
         $this->controller = new Controller();
         $this->controllers = array_merge($this->controllers, $this->controller->getController());
+        $this->controllers = array_merge($this->controllers, (new ControllerPages)->getController());
         $this->controllers = array_merge($this->controllers, (new ControllerNews)->getController());
         $this->controllers = array_merge($this->controllers, (new ControllerFeedback)->getController());
         $this->request = new Request($this->controllers, $root); 
