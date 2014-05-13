@@ -11,39 +11,74 @@
 namespace Happy\Extensions\News;
 
 use Happy\Controller as BaseController;
+use Happy\Extensions\News\Model as NewsModel;
 
 class Controller extends BaseController
 {
     public function __construct()
     {   
-        $this->setController('news', function(){
-            $this->news();  
+        $this->setController('news', function() {
+            $response = (new NewsModel())->newsList();
+            
+            return $this->render([
+                    'template' => 'news_list',
+                    'response' => $response
+                ]
+            );          
         });
         
-        $this->setController('news/{category}', function($parameters){
-            $this->newsCategoryPage($parameters['category']); 
+        $this->setController('{news_link}', function($parameters) {
+            $response = (new NewsModel())->newsItem($parameters['news_link']);
+   
+            if (!empty($response)) {
+                return $this->render([
+                        'template' => 'news_item',
+                        'response' => $response
+                    ]
+                );   
+            } else {
+                return $this->render([
+                        'template' => '404'
+                    ]
+                );
+            }            
         });
         
-        $this->setController('news/{category}/page{id:int}', function($parameters){
-            $this->newsCategoryPage($parameters['category'], $parameters['id']);     
+        
+        $this->setController('@/news', function() {
+            $response = (new NewsModel())->newsList();
+            
+            return $this->render([
+                    'template' => 'admin/news_list',
+                    'response' => $response
+                ]
+            );      
         });
+        
+        $this->setController('@/news/{news_link}', function($parameters) {
+            $response = (new NewsModel())->newsItem($parameters['news_link']);
+            
+            if (!empty($response)) {
+                return $this->render([
+                        'template' => 'admin/news_item',
+                        'response' => $response
+                    ]
+                );   
+            } else {
+                return $this->render([
+                        'template' => 'admin/404'
+                    ]
+                );
+            }             
+        });
+        
+        $this->setController('@/news/delete', function($parameters) {
+            (new NewsModel())->newsDelete($parameters['post']['news_id']);          
+        }, 'ajax');
+        
+        $this->setController('@/news/update', function($parameters) {
+            (new NewsModel())->newsUpdate($parameters['post']);             
+        }, 'ajax');
     }
-    
-    /** 
-     * Описание метода
-	 */
-	protected function news()
-	{
-        echo 'News Controller method <br />';
-	}
-    
-    /** 
-     * Описание метода
-	 */
-	protected function newsCategoryPage($category, $id = null)
-	{
-        echo 'News Controller method <br />';
-        echo '$category: ' . $category . ' $id: ' . $id;
-	}
 }
 ?>
