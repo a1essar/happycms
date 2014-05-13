@@ -72,13 +72,18 @@ class Controller extends BaseController
             }             
         });
         
-        $this->setController('@/news/delete', function($parameters) {
-            (new NewsModel())->newsDelete($parameters['post']['news_id']);          
+        $this->setController('@/news/add', function($parameters) {
+            (new NewsModel())->newsAdd($parameters['post']);            
         }, 'ajax');
         
         $this->setController('@/news/update', function($parameters) {
             (new NewsModel())->newsUpdate($parameters['post']);             
         }, 'ajax');
+        
+        $this->setController('@/news/delete', function($parameters) {
+            (new NewsModel())->newsDelete($parameters['post']['news_id']);          
+        }, 'ajax');
+
     }
 }
 ?>

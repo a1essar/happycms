@@ -112,7 +112,7 @@ class Model extends BaseModel
         $this->feedback_name    = $parameters['feedback_name'];
         $this->feedback_email   = $parameters['feedback_email'];
         $this->feedback_content = $parameters['feedback_content'];
-        $this->feedback_date    = (new \DateTime())->format('Y-m-d H:i:s');        
+        $this->feedback_date    = $this->now();        
         $this->save();
         
         $response['content'] = $parameters;

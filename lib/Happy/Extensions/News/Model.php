@@ -12,6 +12,7 @@
 namespace Happy\Extensions\News;
 
 use Happy\BaseModel as BaseModel;
+use Happy\Helpers as Helpers;
 
 class Model extends BaseModel
 {
@@ -84,7 +85,80 @@ class Model extends BaseModel
         
         return $response;        
     }
+    
+    /**
+     * Add News item
+     *
+     * @param  array $parameters - data of news item
+     * @return array $response - contains execution status 
+     */
+    public function newsAdd($parameters)
+    {
+        if (empty($parameters['news_title'])) {
+            return $response['error'] = 'empty_title';
+        }
+        
+        if (empty($parameters['news_link'])) {
+            $parameters['news_link'] = Helpers::translit($parameters['news_title']);   
+        } else {
+            $parameters['news_link'] = Helpers::translit($parameters['news_link']);
+        }
+        
+        if ($this->checkLink($this->tableName,'news_link', $parameters['news_link'])) {
+            $parameters['news_link'] .= $this->getAutoincrement($this->tableName);
+        }
+        
+        $this->news_title = $parameters['news_title'];
+        $this->news_link = $parameters['news_link'];
+        $this->news_date = $this->now();        
+        $this->save();
+        
+        $response['content'] = $parameters;
+        $response['error'] = 'news_add_true';
+        return $response;    
+    }
 
+    
+    /**
+     * Описание метода
+     */
+    public function newsUpdate($parameters)
+    {
+        if (empty($parameters['news_id']))
+        {
+            return $response['error'] = 'empty_id';
+        }
+        
+        if (empty($parameters['news_title'])) {
+            return $response['error'] = 'empty_title';
+        }
+        
+        if (empty($parameters['news_link'])) {
+            $parameters['news_link'] = Helpers::translit($parameters['news_title']);   
+        } else {
+            $parameters['news_link'] = Helpers::translit($parameters['news_link']);
+        }
+        
+        if ($this->checkLink($this->tableName,'news_link', $parameters['news_link'])) {
+            $parameters['news_link'] .= $this->getAutoincrement($this->tableName);
+        }
+
+        $newsItem = $this->reset()->findOne($parameters['news_id']);
+        
+        if (empty($newsItem)) {
+            $response['error'] = 'record_not_found';
+        }
+        
+        foreach ($parameters as $key=>$value) {
+            $newsItem->$key = $parameters[$key];
+        }
+        
+        $newsItem->save();
+        
+        $response['content'] = $parameters;
+        $response['error'] = 'news_update_true';
+        return $response; 
+    }
 
     /**
      * Описание метода
@@ -109,33 +183,7 @@ class Model extends BaseModel
             $response['error'] = 'error';
         }
     }
-    
-    /**
-     * Описание метода
-     */
-    public function newsUpdate($parameters)
-    {
-        if (empty($parameters['news_id']))
-        {
-            return $response['error'] = 'empty_id';
-        }
 
-        $newsItem = $this->reset()->findOne($parameters['news_id']);
-        
-        if (empty($newsItem)) {
-            $response['error'] = 'record_not_found';
-        }
-        
-        foreach ($parameters as $key=>$value) {
-            $newsItem->$key = $parameters[$key];
-        }
-        
-        $newsItem->save();
-        
-        $response['content'] = $parameters;
-        $response['error'] = 'news_update_true';
-        return $response; 
-    }
 }
 
 ?>

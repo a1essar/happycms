@@ -72,12 +72,16 @@ class Controller extends BaseController
             }             
         });
         
-        $this->setController('@/pages/delete', function($parameters) {
-            (new PagesModel())->pagesDelete($parameters['post']['pages_id']);          
+        $this->setController('@/pages/add', function($parameters) {
+            (new PagesModel())->pagesAdd($parameters['post']);            
         }, 'ajax');
         
         $this->setController('@/pages/update', function($parameters) {
             (new PagesModel())->pagesUpdate($parameters['post']);             
+        }, 'ajax');
+        
+        $this->setController('@/pages/delete', function($parameters) {
+            (new PagesModel())->pagesDelete($parameters['post']['pages_id']);          
         }, 'ajax');
     }
 }

@@ -12,6 +12,7 @@
 namespace Happy\Extensions\Pages;
 
 use Happy\BaseModel as BaseModel;
+use Happy\Helpers as Helpers;
 
 class Model extends BaseModel
 {
@@ -84,8 +85,82 @@ class Model extends BaseModel
         
         return $response;        
     }
+    
+    /**
+     * Add pages item
+     *
+     * @param  array $parameters - data of pages item
+     * @return array $response - contains execution status 
+     */
+    public function pagesAdd($parameters)
+    {
+        if (empty($parameters['pages_title'])) {
+            return $response['error'] = 'empty_title';
+        }
+        
+        if (empty($parameters['pages_link'])) {
+            $parameters['pages_link'] = Helpers::translit($parameters['pages_title']);   
+        } else {
+            $parameters['pages_link'] = Helpers::translit($parameters['pages_link']);
+        }
+        
+        if ($this->checkLink($this->tableName,'pages_link', $parameters['pages_link'])) {
+            $parameters['pages_link'] .= $this->getAutoincrement($this->tableName);
+        }
+        
+        $this->pages_title = $parameters['pages_title'];
+        $this->pages_link = $parameters['pages_link'];
+        $this->pages_date = $this->now();        
+        $this->save();
+        
+        $response['content'] = $parameters;
+        $response['error'] = 'pages_add_true';
+        return $response;    
+    }
 
+    
+    /**
+     * Описание метода
+     */
+    public function pagesUpdate($parameters)
+    {
+        if (empty($parameters['pages_id']))
+        {
+            return $response['error'] = 'empty_id';
+        }
+        
+        if (empty($parameters['pages_title'])) {
+            return $response['error'] = 'empty_title';
+        }
+        
+        if (empty($parameters['pages_link'])) {
+            $parameters['pages_link'] = Helpers::translit($parameters['pages_title']);   
+        } else {
+            $parameters['pages_link'] = Helpers::translit($parameters['pages_link']);
+        }
+        
+        if ($this->checkLink($this->tableName,'pages_link', $parameters['pages_link'])) {
+            $parameters['pages_link'] .= $this->getAutoincrement($this->tableName);
+        }
 
+        $pagesItem = $this->reset()->findOne($parameters['pages_id']);
+        
+        if (empty($pagesItem)) {
+            $response['error'] = 'record_not_found';
+        }
+        
+        foreach ($parameters as $key=>$value) {
+            $pagesItem->$key = $parameters[$key];
+        }
+        
+        $pagesItem->save();
+        
+        $response['content'] = $parameters;
+        $response['error'] = 'pages_update_true';
+        return $response; 
+    }
+    
+    
     /**
      * Описание метода
      */
@@ -108,33 +183,6 @@ class Model extends BaseModel
         } else {
             $response['error'] = 'error';
         }
-    }
-    
-    /**
-     * Описание метода
-     */
-    public function pagesUpdate($parameters)
-    {
-        if (empty($parameters['pages_id']))
-        {
-            return $response['error'] = 'empty_id';
-        }
-
-        $pagesItem = $this->reset()->findOne($parameters['pages_id']);
-        
-        if (empty($pagesItem)) {
-            $response['error'] = 'record_not_found';
-        }
-        
-        foreach ($parameters as $key=>$value) {
-            $pagesItem->$key = $parameters[$key];
-        }
-        
-        $pagesItem->save();
-        
-        $response['content'] = $parameters;
-        $response['error'] = 'pages_update_true';
-        return $response; 
     }
 }
 
