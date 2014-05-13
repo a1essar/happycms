@@ -8,31 +8,31 @@
  * file that was distributed with this source code.
  */
  
-namespace Happy\Extensions\News;
+namespace Happy\Extensions\Pages;
 
 use Happy\Controller as BaseController;
-use Happy\Extensions\News\Model as NewsModel;
+use Happy\Extensions\Pages\Model as PagesModel;
 
 class Controller extends BaseController
 {
     public function __construct()
     {   
-        $this->setController('news', function() {
-            $response = (new NewsModel())->newsList();
+        $this->setController('pages', function() {
+            $response = (new PagesModel())->pagesList();
             
             return $this->render([
-                    'template' => 'news_list',
+                    'template' => 'pages_list',
                     'response' => $response
                 ]
             );          
         });
         
-        $this->setController('{news_link}', function($parameters) {
-            $response = (new NewsModel())->newsItem($parameters['news_link']);
+        $this->setController('{pages_link}', function($parameters) {
+            $response = (new PagesModel())->pagesItem($parameters['pages_link']);
    
             if (!empty($response)) {
                 return $this->render([
-                        'template' => 'news_item',
+                        'template' => 'pages_item',
                         'response' => $response
                     ]
                 );   
@@ -44,23 +44,23 @@ class Controller extends BaseController
             }            
         });
         
-        
-        $this->setController('@/news', function() {
-            $response = (new NewsModel())->newsList();
+
+        $this->setController('@/pages', function() {
+            $response = (new PagesModel())->pagesList();
             
             return $this->render([
-                    'template' => 'admin/news_list',
+                    'template' => 'admin/pages_list',
                     'response' => $response
                 ]
             );      
         });
         
-        $this->setController('@/news/{news_link}', function($parameters) {
-            $response = (new NewsModel())->newsItem($parameters['news_link']);
+        $this->setController('@/pages/{pages_link}', function($parameters) {
+            $response = (new PagesModel())->pagesItem($parameters['pages_link']);
             
             if (!empty($response)) {
                 return $this->render([
-                        'template' => 'admin/news_item',
+                        'template' => 'admin/pages_item',
                         'response' => $response
                     ]
                 );   
@@ -72,18 +72,17 @@ class Controller extends BaseController
             }             
         });
         
-        $this->setController('@/news/add', function($parameters) {
-            (new NewsModel())->newsAdd($parameters['post']);            
+        $this->setController('@/pages/add', function($parameters) {
+            (new PagesModel())->pagesAdd($parameters['post']);            
         }, 'ajax');
         
-        $this->setController('@/news/update', function($parameters) {
-            (new NewsModel())->newsUpdate($parameters['post']);             
+        $this->setController('@/pages/update', function($parameters) {
+            (new PagesModel())->pagesUpdate($parameters['post']);             
         }, 'ajax');
         
-        $this->setController('@/news/delete', function($parameters) {
-            (new NewsModel())->newsDelete($parameters['post']['news_id']);          
+        $this->setController('@/pages/delete', function($parameters) {
+            (new PagesModel())->pagesDelete($parameters['post']['pages_id']);          
         }, 'ajax');
-
     }
 }
 ?>

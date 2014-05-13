@@ -18,10 +18,11 @@ class Config
     public static $config = [
         'db' => [
             'mysql' => [
-                'host' => '',
-                'user' => '',
-                'password' => '',
-                'name' => ''
+                'host' => 'localhost',
+                'user' => 'dev2',
+                'password' => 'Wj7GuuiW',
+                'name' => 'dev2',
+                'charset' => 'UTF8'
             ]
         ],
         'path' => [
