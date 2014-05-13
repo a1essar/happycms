@@ -65,8 +65,11 @@ class Controller extends BaseController
                     ]
                 );   
             } else {
-                echo '404';
-            }            
+                return $this->render([
+                        'template' => 'admin/404'
+                    ]
+                );
+            }             
         });
         
         $this->setController('@/pages/delete', function($parameters) {
